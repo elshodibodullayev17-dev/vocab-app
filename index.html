@@ -1,0 +1,372 @@
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CEFR Lug'at Treneri</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;background:#f5f5f0;color:#1a1a1a;min-height:100vh}
+.app{max-width:700px;margin:0 auto;padding:1rem}
+header{display:flex;justify-content:space-between;align-items:center;margin-bottom:1.25rem;padding:1rem 1.25rem;background:#fff;border-radius:14px;border:1px solid #e8e8e3}
+.logo{font-size:18px;font-weight:600}
+.subtitle{font-size:12px;color:#888;margin-top:2px}
+.tabs{display:flex;gap:4px;margin-bottom:1rem;background:#fff;border-radius:12px;padding:6px;border:1px solid #e8e8e3}
+.tab{flex:1;padding:8px;border:none;background:none;cursor:pointer;font-size:13px;color:#888;border-radius:8px;transition:all .15s;font-family:inherit}
+.tab.active{background:#1a1a1a;color:#fff;font-weight:500}
+.panel{display:none}.panel.active{display:block}
+.card{background:#fff;border:1px solid #e8e8e3;border-radius:14px;padding:1rem 1.25rem;margin-bottom:12px}
+.inp{width:100%;padding:10px 14px;border:1px solid #ddd;border-radius:10px;font-size:14px;font-family:inherit;background:#fff;outline:none;transition:border .15s}
+.inp:focus{border-color:#1a1a1a}
+.btn{padding:9px 18px;border:1px solid #ddd;border-radius:10px;background:#fff;cursor:pointer;font-size:13px;font-family:inherit;transition:all .15s}
+.btn:hover{background:#f5f5f0}
+.btn-primary{background:#1a1a1a;color:#fff;border-color:#1a1a1a}
+.btn-primary:hover{background:#333}
+.btn-sm{padding:5px 12px;font-size:12px}
+.badge{display:inline-block;padding:3px 9px;border-radius:20px;font-size:11px;font-weight:500}
+.b-verb{background:#e8e6ff;color:#4a3f9e}
+.b-noun{background:#d4f5e9;color:#1a6b4a}
+.b-adj{background:#fde8dd;color:#8b3a1f}
+.b-adv{background:#daeeff;color:#1a5a8b}
+.b-prep{background:#e0f0c8;color:#3a5c14}
+.b-other{background:#ebebeb;color:#555}
+.b-cefr{background:#fff0c8;color:#7a5200}
+.word-card{background:#fff;border:1px solid #e8e8e3;border-radius:14px;padding:1rem 1.25rem;margin-bottom:10px}
+.word-title{font-size:20px;font-weight:600}
+.word-uz{font-size:14px;color:#666;margin:4px 0 8px}
+.examples{font-size:13px;color:#666;line-height:1.8;border-top:1px solid #f0f0ec;padding-top:10px;margin-top:8px}
+.examples li{margin-bottom:5px;list-style:none;padding-left:12px;border-left:2px solid #ddd}
+.tip-box{background:#fafaf7;border-radius:8px;padding:8px 12px;font-size:12px;color:#666;margin-top:8px;line-height:1.6}
+.loading{display:flex;align-items:center;gap:8px;color:#888;font-size:13px;padding:10px 0;font-style:italic}
+.dot{width:6px;height:6px;border-radius:50%;background:#bbb;display:inline-block;animation:blink 1.2s infinite}
+.dot:nth-child(2){animation-delay:.2s}.dot:nth-child(3){animation-delay:.4s}
+@keyframes blink{0%,80%,100%{opacity:.2}40%{opacity:1}}
+.err{background:#fff0f0;border:1px solid #f5c0c0;border-radius:10px;padding:10px 14px;font-size:13px;color:#c00;margin-top:8px}
+.stat-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:1rem}
+.stat-box{background:#fff;border:1px solid #e8e8e3;border-radius:12px;padding:10px;text-align:center}
+.stat-n{font-size:22px;font-weight:600}
+.stat-l{font-size:11px;color:#888}
+.progress{height:4px;background:#eee;border-radius:2px;margin:5px 0}
+.progress-bar{height:4px;background:#1a1a1a;border-radius:2px;transition:width .3s}
+.filter-row{display:flex;gap:6px;flex-wrap:wrap;align-items:center;margin-bottom:12px}
+.fbtn{padding:5px 12px;border:1px solid #ddd;border-radius:20px;background:#fff;cursor:pointer;font-size:12px;font-family:inherit}
+.fbtn.active{background:#1a1a1a;color:#fff;border-color:#1a1a1a}
+.quiz-card{background:#fff;border:1px solid #e8e8e3;border-radius:14px;padding:1.5rem;text-align:center;margin-bottom:12px}
+.quiz-word{font-size:32px;font-weight:600;margin-bottom:6px}
+.quiz-sub{font-size:12px;color:#888;margin-bottom:1.25rem}
+.options{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.opt{padding:12px;border:1px solid #ddd;border-radius:10px;cursor:pointer;font-size:13px;background:#fff;font-family:inherit;transition:all .12s}
+.opt:hover{background:#f5f5f0}
+.opt.correct{background:#e8f5e0;border-color:#5a9e2a;color:#2a5e0a}
+.opt.wrong{background:#fff0f0;border-color:#e04a4a;color:#a00}
+.fill-inp{width:100%;padding:10px 14px;border:1px solid #ddd;border-radius:10px;font-size:16px;text-align:center;font-family:inherit;outline:none;margin-bottom:10px}
+.fill-inp.correct{border-color:#5a9e2a;background:#e8f5e0;color:#2a5e0a}
+.fill-inp.wrong{border-color:#e04a4a;background:#fff0f0;color:#a00}
+.qt-row{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:12px}
+.qtbtn{padding:6px 14px;border:1px solid #ddd;border-radius:20px;background:#fff;cursor:pointer;font-size:12px;font-family:inherit}
+.qtbtn.active{background:#1a1a1a;color:#fff;border-color:#1a1a1a}
+.streak-day{width:32px;height:32px;border-radius:7px;display:flex;align-items:center;justify-content:center;font-size:10px;border:1px solid #e8e8e3;color:#aaa}
+.streak-day.done{background:#e8f5e0;border-color:#5a9e2a;color:#2a5e0a;font-weight:500}
+.streak-day.today{border:2px solid #1a1a1a;color:#1a1a1a}
+.speak-btn{background:none;border:none;cursor:pointer;font-size:15px;padding:2px 5px;color:#aaa}
+.speak-btn:hover{color:#333}
+.sample-row{display:flex;gap:6px;flex-wrap:wrap;justify-content:center}
+</style>
+</head>
+<body>
+<div class="app">
+  <header>
+    <div>
+      <div class="logo">CEFR Lug'at Treneri</div>
+      <div class="subtitle" id="status-txt">Gemini AI · O'zbek tilida</div>
+    </div>
+    <div style="display:flex;align-items:center;gap:10px">
+      <span id="streak-badge" style="font-size:14px;font-weight:600"></span>
+    </div>
+  </header>
+
+  <div class="tabs">
+    <button class="tab active" onclick="switchTab('add',this)">+ Qo'shish</button>
+    <button class="tab" onclick="switchTab('list',this)">Lug'at</button>
+    <button class="tab" onclick="switchTab('quiz',this)">Imtihon</button>
+    <button class="tab" onclick="switchTab('streak',this)">Streak</button>
+  </div>
+
+  <!-- ADD -->
+  <div class="panel active" id="panel-add">
+    <div class="card">
+      <div style="font-size:14px;font-weight:500;margin-bottom:10px">Yangi so'z qo'shish</div>
+      <div style="display:flex;gap:8px;margin-bottom:8px">
+        <input id="word-input" class="inp" placeholder="Inglizcha so'z (masalan: run)">
+        <button class="btn btn-primary" id="analyze-btn" onclick="analyzeWord()">AI tahlil</button>
+      </div>
+      <div style="font-size:12px;color:#888">Enter bosib ham ishlaydi</div>
+      <div id="ai-result"></div>
+    </div>
+    <div class="card" style="border-style:dashed;text-align:center;padding:1.25rem;background:#fafaf7">
+      <div style="font-size:12px;color:#888;margin-bottom:10px">Namunalar</div>
+      <div class="sample-row">
+        <button class="btn btn-sm" onclick="quickAdd('run')">run</button>
+        <button class="btn btn-sm" onclick="quickAdd('however')">however</button>
+        <button class="btn btn-sm" onclick="quickAdd('achieve')">achieve</button>
+        <button class="btn btn-sm" onclick="quickAdd('significant')">significant</button>
+        <button class="btn btn-sm" onclick="quickAdd('despite')">despite</button>
+        <button class="btn btn-sm" onclick="quickAdd('fluent')">fluent</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- LIST -->
+  <div class="panel" id="panel-list">
+    <div class="stat-grid">
+      <div class="stat-box"><div class="stat-n" id="s-total">0</div><div class="stat-l">Jami</div></div>
+      <div class="stat-box"><div class="stat-n" id="s-known">0</div><div class="stat-l">O'rgandim</div></div>
+      <div class="stat-box"><div class="stat-n" id="s-review">0</div><div class="stat-l">Takrorlash</div></div>
+      <div class="stat-box"><div class="stat-n" id="s-today">0</div><div class="stat-l">Bugun</div></div>
+    </div>
+    <div class="filter-row">
+      <span style="font-size:12px;color:#888">Daraja:</span>
+      <button class="fbtn active" onclick="setFilter('all',this)">Hammasi</button>
+      <button class="fbtn" onclick="setFilter('A1',this)">A1</button>
+      <button class="fbtn" onclick="setFilter('A2',this)">A2</button>
+      <button class="fbtn" onclick="setFilter('B1',this)">B1</button>
+      <button class="fbtn" onclick="setFilter('B2',this)">B2</button>
+      <button class="fbtn" onclick="setFilter('C1',this)">C1</button>
+      <button class="fbtn" onclick="setFilter('C2',this)">C2</button>
+    </div>
+    <div id="word-list"></div>
+  </div>
+
+  <!-- QUIZ -->
+  <div class="panel" id="panel-quiz">
+    <div class="qt-row">
+      <button class="qtbtn active" onclick="setQT('multi',this)">So'zdan tarjima</button>
+      <button class="qtbtn" onclick="setQT('reverse',this)">Tarjimadan so'z</button>
+      <button class="qtbtn" onclick="setQT('fill',this)">Bo'sh joy</button>
+      <button class="qtbtn" onclick="setQT('mixed',this)">Aralash</button>
+    </div>
+    <div id="quiz-area"></div>
+  </div>
+
+  <!-- STREAK -->
+  <div class="panel" id="panel-streak">
+    <div class="card">
+      <div style="font-size:14px;font-weight:500;margin-bottom:4px">30 kunlik faollik</div>
+      <div id="streak-info" style="font-size:13px;color:#888;margin-bottom:12px"></div>
+      <div style="display:flex;gap:4px;flex-wrap:wrap" id="streak-bar"></div>
+    </div>
+    <div class="card">
+      <div style="font-size:14px;font-weight:500;margin-bottom:12px">Bugun takrorlang</div>
+      <div id="review-list"></div>
+    </div>
+  </div>
+</div>
+
+<script>
+const STORE='cefr_netlify_v1';
+const SSTORE='cefr_streak_nl_v1';
+const TODAY=new Date().toISOString().slice(0,10);
+// Netlify deploy qilgandan keyin bu URL avtomatik ishlaydi
+const API_URL='/.netlify/functions/gemini';
+
+let vocab=JSON.parse(localStorage.getItem(STORE)||'[]');
+let streakDays=JSON.parse(localStorage.getItem(SSTORE)||'[]');
+let activeFilter='all', quizType='multi', quizState={}, busy=false;
+
+function save(){localStorage.setItem(STORE,JSON.stringify(vocab));markStreak();}
+function markStreak(){
+  if(!streakDays.includes(TODAY))streakDays.push(TODAY);
+  localStorage.setItem(SSTORE,JSON.stringify(streakDays));
+  renderStreakBadge();
+}
+function renderStreakBadge(){
+  let s=0,d=new Date();
+  while(true){const k=d.toISOString().slice(0,10);if(streakDays.includes(k)){s++;d.setDate(d.getDate()-1);}else break;}
+  document.getElementById('streak-badge').textContent=s>0?'🔥 '+s+' kun':'';
+}
+function toast(msg){
+  const d=document.createElement('div');
+  d.style.cssText='position:fixed;bottom:1rem;right:1rem;background:#1a1a1a;color:#fff;border-radius:10px;padding:10px 16px;font-size:13px;z-index:999';
+  d.textContent=msg;document.body.appendChild(d);setTimeout(()=>d.remove(),2500);
+}
+function switchTab(t,btn){
+  document.querySelectorAll('.tab').forEach(b=>b.classList.remove('active'));
+  document.querySelectorAll('.panel').forEach(p=>p.classList.remove('active'));
+  btn.classList.add('active');document.getElementById('panel-'+t).classList.add('active');
+  if(t==='list')renderList();if(t==='quiz')startQuiz();if(t==='streak')renderStreak();
+}
+document.getElementById('word-input').addEventListener('keydown',e=>{if(e.key==='Enter')analyzeWord();});
+function quickAdd(w){document.getElementById('word-input').value=w;analyzeWord();}
+
+async function analyzeWord(){
+  if(busy)return;
+  const word=document.getElementById('word-input').value.trim();
+  if(!word)return;
+  busy=true;
+  const btn=document.getElementById('analyze-btn');
+  btn.disabled=true;btn.textContent='Tahlil...';
+  const res=document.getElementById('ai-result');
+  res.innerHTML='<div class="loading"><span class="dot"></span><span class="dot"></span><span class="dot"></span><span style="margin-left:6px">Gemini tahlil qilyapti...</span></div>';
+  try{
+    const r=await fetch(API_URL+'?word='+encodeURIComponent(word));
+    if(!r.ok)throw new Error('HTTP '+r.status);
+    const data=await r.json();
+    if(data.error)throw new Error(data.error);
+    let text=data.candidates[0].content.parts[0].text;
+    text=text.replace(/```json|```/g,'').trim();
+    const parsed=JSON.parse(text);
+    parsed.known=0;parsed.added=Date.now();parsed.addedDate=TODAY;
+    showPreview(parsed);
+  }catch(e){
+    res.innerHTML=`<div class="err">Xatolik: ${e.message}</div>`;
+  }finally{
+    busy=false;btn.disabled=false;btn.textContent='AI tahlil';
+  }
+}
+function posClass(p){const m={verb:'b-verb',noun:'b-noun',adjective:'b-adj',adverb:'b-adv',preposition:'b-prep'};return m[p]||'b-other';}
+function posUz(p){const m={verb:"Fe'l",noun:'Ot',adjective:'Sifat',adverb:'Ravish',preposition:"Ko'makchi",other:'Boshqa'};return m[p]||p;}
+function speak(word){if('speechSynthesis' in window){speechSynthesis.cancel();const u=new SpeechSynthesisUtterance(word);u.lang='en-US';u.rate=0.85;speechSynthesis.speak(u);}}
+
+function showPreview(w){
+  const res=document.getElementById('ai-result');
+  const ws=JSON.stringify(w);
+  res.innerHTML=`<div class="word-card" style="margin-top:12px">
+    <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:6px">
+      <div style="display:flex;align-items:center;gap:8px">
+        <span class="word-title">${w.word}</span>
+        <button class="speak-btn" onclick="speak('${w.word.replace(/'/g,"\\'")}')">🔊</button>
+      </div>
+      <div style="display:flex;gap:5px"><span class="badge b-cefr">${w.cefr}</span><span class="badge ${posClass(w.pos)}">${posUz(w.pos)}</span></div>
+    </div>
+    <div class="word-uz">${w.uz} — <em>${w.definition_uz}</em></div>
+    <ul class="examples">${w.examples.map(e=>`<li>${e}</li>`).join('')}</ul>
+    <div class="tip-box">💡 ${w.tip}</div>
+    <div style="margin-top:12px;display:flex;gap:8px">
+      <button class="btn btn-primary" onclick='saveWord(${ws.replace(/'/g,"&#39;")})'>Lug'atga qo'shish</button>
+      <button class="btn" onclick="document.getElementById('ai-result').innerHTML=''">Bekor</button>
+    </div>
+  </div>`;
+}
+function saveWord(w){
+  if(typeof w==='string')w=JSON.parse(w);
+  if(vocab.find(v=>v.word.toLowerCase()===w.word.toLowerCase())){toast("Allaqachon bor!");return;}
+  vocab.unshift(w);save();
+  document.getElementById('word-input').value='';
+  document.getElementById('ai-result').innerHTML=`<div style="color:#2a7a0a;font-size:13px;padding:10px 0;font-weight:500">✓ "${w.word}" qo'shildi!</div>`;
+}
+function setFilter(f,btn){
+  activeFilter=f;document.querySelectorAll('.fbtn').forEach(b=>b.classList.remove('active'));btn.classList.add('active');renderList();
+}
+function renderList(){
+  const today=vocab.filter(v=>v.addedDate===TODAY).length;
+  const known=vocab.filter(v=>(v.known||0)>=3).length;
+  document.getElementById('s-total').textContent=vocab.length;
+  document.getElementById('s-known').textContent=known;
+  document.getElementById('s-review').textContent=vocab.length-known;
+  document.getElementById('s-today').textContent=today;
+  const filtered=activeFilter==='all'?vocab:vocab.filter(v=>v.cefr===activeFilter);
+  const c=document.getElementById('word-list');
+  if(!filtered.length){c.innerHTML='<div style="text-align:center;color:#888;padding:2rem;font-size:14px">Bu darajada so\'z yo\'q</div>';return;}
+  c.innerHTML=filtered.map(w=>{
+    const ri=vocab.indexOf(w);
+    return `<div class="word-card">
+      <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:4px">
+        <div style="display:flex;align-items:center;gap:6px">
+          <span class="word-title" style="font-size:18px">${w.word}</span>
+          <button class="speak-btn" onclick="speak('${w.word.replace(/'/g,"\\'")}')">🔊</button>
+        </div>
+        <div style="display:flex;gap:4px;align-items:center">
+          <span class="badge b-cefr">${w.cefr}</span>
+          <span class="badge ${posClass(w.pos)}">${posUz(w.pos)}</span>
+          <button class="btn btn-sm" style="color:#c00;border-color:#f5c0c0" onclick="deleteWord(${ri})">✕</button>
+        </div>
+      </div>
+      <div class="word-uz">${w.uz}</div>
+      <div class="progress"><div class="progress-bar" style="width:${Math.min((w.known||0)*33,100)}%"></div></div>
+      <div style="font-size:11px;color:#888;margin-bottom:8px">${(w.known||0)>=3?"✓ O'rgandim":"Takrorlash kerak"} · ${w.known||0}/3</div>
+      <ul class="examples">${w.examples.slice(0,2).map(e=>`<li>${e}</li>`).join('')}</ul>
+      <div class="tip-box">💡 ${w.tip||''}</div>
+    </div>`;
+  }).join('');
+}
+function deleteWord(i){const w=vocab[i];vocab.splice(i,1);localStorage.setItem(STORE,JSON.stringify(vocab));renderList();toast(`"${w.word}" o'chirildi`);}
+function setQT(t,btn){quizType=t;document.querySelectorAll('.qtbtn').forEach(b=>b.classList.remove('active'));btn.classList.add('active');startQuiz();}
+function startQuiz(){
+  const area=document.getElementById('quiz-area');
+  if(vocab.length<2){area.innerHTML='<div style="text-align:center;color:#888;padding:2rem">Kamida 2 ta so\'z qo\'shing!</div>';return;}
+  const shuffled=[...vocab].sort(()=>Math.random()-.5).slice(0,Math.min(vocab.length,10));
+  quizState={words:shuffled,idx:0,score:0,total:shuffled.length,answered:false};showQuestion();
+}
+function getQType(){if(quizType==='mixed')return['multi','reverse','fill'][Math.floor(Math.random()*3)];return quizType;}
+function showQuestion(){
+  const area=document.getElementById('quiz-area');
+  const{words,idx,total,score}=quizState;
+  if(idx>=total){
+    const pct=Math.round(score/total*100);
+    area.innerHTML=`<div class="quiz-card"><div style="font-size:42px;margin-bottom:10px">${pct>=80?'🏆':pct>=60?'🎉':'📚'}</div><div style="font-size:24px;font-weight:600;margin-bottom:6px">${score}/${total} to'g'ri</div><div style="font-size:14px;color:#888;margin-bottom:1.5rem">${pct>=80?"A'lo natija!":pct>=60?"Yaxshi, davom eting!":"Ko'proq mashq kerak"}</div><button class="btn btn-primary" onclick="startQuiz()">Qaytadan</button></div>`;
+    return;
+  }
+  const w=words[idx];
+  const others=vocab.filter(v=>v.word!==w.word).sort(()=>Math.random()-.5).slice(0,3);
+  const prog=`<div style="font-size:12px;color:#888;margin-bottom:10px;display:flex;justify-content:space-between"><span>${idx+1}/${total}</span><span>Ball: ${score}</span></div>`;
+  const type=getQType();
+  if(type==='fill'){
+    const sent=(w.fill_sentence||w.examples[0]||'').replace(new RegExp('\\b'+w.word+'\\b','gi'),'_____');
+    area.innerHTML=prog+`<div class="quiz-card"><div class="quiz-sub">${w.cefr} · Bo'sh joyni to'ldiring</div><div style="font-size:16px;font-weight:500;margin-bottom:14px;line-height:1.7">${sent}</div><input class="fill-inp" id="fill-ans" placeholder="Javob..." autocomplete="off"><button class="btn btn-primary" onclick="checkFill('${w.word.replace(/'/g,"\\'")}')">Tekshirish</button></div>`;
+    const fi=document.getElementById('fill-ans');fi.focus();fi.addEventListener('keydown',e=>{if(e.key==='Enter')checkFill(w.word);});return;
+  }
+  if(type==='reverse'){
+    const opts=[...others.map(v=>v.word),w.word].sort(()=>Math.random()-.5);
+    area.innerHTML=prog+`<div class="quiz-card"><div class="quiz-sub">${w.cefr} · Inglizcha so'zni toping</div><div class="quiz-word">${w.uz}</div><div class="options">${opts.map(o=>`<button class="opt" onclick="checkOpt(this,'${o}','${w.word}','${w.word}')">${o}</button>`).join('')}</div></div>`;return;
+  }
+  const opts=[...others.map(v=>v.uz),w.uz].sort(()=>Math.random()-.5);
+  area.innerHTML=prog+`<div class="quiz-card"><div class="quiz-sub">${w.cefr} · ${posUz(w.pos)}</div><div class="quiz-word">${w.word} <button class="speak-btn" onclick="speak('${w.word.replace(/'/g,"\\'")}')">🔊</button></div><div style="font-size:13px;color:#888;margin-bottom:1rem">O'zbekcha tarjimasi?</div><div class="options">${opts.map(o=>`<button class="opt" onclick="checkOpt(this,${JSON.stringify(o)},${JSON.stringify(w.uz)},'${w.word}')">${o}</button>`).join('')}</div></div>`;
+}
+function checkOpt(btn,chosen,correct,word){
+  if(quizState.answered)return;quizState.answered=true;
+  document.querySelectorAll('.opt').forEach(o=>{
+    if(o.textContent.trim()===correct.trim())o.classList.add('correct');
+    else if(o===btn&&chosen!==correct)o.classList.add('wrong');
+    o.style.pointerEvents='none';
+  });
+  markKnown(word,chosen===correct);
+  setTimeout(()=>{quizState.idx++;quizState.answered=false;showQuestion();},1300);
+}
+function checkFill(correct){
+  if(quizState.answered)return;quizState.answered=true;
+  const inp=document.getElementById('fill-ans');
+  const ok=inp.value.trim().toLowerCase()===correct.toLowerCase();
+  inp.classList.add(ok?'correct':'wrong');inp.disabled=true;
+  if(!ok)inp.value=correct;
+  markKnown(correct,ok);
+  setTimeout(()=>{quizState.idx++;quizState.answered=false;showQuestion();},1400);
+}
+function markKnown(word,correct){
+  const w=vocab.find(v=>v.word===word);
+  if(w){if(correct){w.known=Math.min((w.known||0)+1,3);quizState.score++;}else{w.known=Math.max((w.known||0)-1,0);}localStorage.setItem(STORE,JSON.stringify(vocab));}
+}
+function renderStreak(){
+  let s=0,d=new Date();
+  while(true){const k=d.toISOString().slice(0,10);if(streakDays.includes(k)){s++;d.setDate(d.getDate()-1);}else break;}
+  document.getElementById('streak-info').textContent=s>0?`Joriy streak: ${s} kun 🔥`:"Bugun so'z o'rganing!";
+  const bar=document.getElementById('streak-bar');bar.innerHTML='';
+  for(let i=29;i>=0;i--){
+    const dd=new Date();dd.setDate(dd.getDate()-i);const k=dd.toISOString().slice(0,10);
+    const el=document.createElement('div');
+    el.className='streak-day'+(streakDays.includes(k)?' done':'')+(k===TODAY?' today':'');
+    el.title=k;el.textContent=['Ya','Du','Se','Ch','Pa','Sh','Ya'][dd.getDay()];
+    bar.appendChild(el);
+  }
+  const review=vocab.filter(v=>(v.known||0)<3).slice(0,6);
+  const rl=document.getElementById('review-list');
+  if(!review.length){rl.innerHTML='<div style="font-size:13px;color:#888">Hammani o\'rgandingiz!</div>';return;}
+  rl.innerHTML=review.map(w=>`<div style="display:flex;justify-content:space-between;align-items:center;padding:9px 0;border-bottom:1px solid #f0f0ec">
+    <div><span style="font-weight:600">${w.word}</span> <button class="speak-btn" onclick="speak('${w.word.replace(/'/g,"\\'")}')">🔊</button> <span style="font-size:13px;color:#888">— ${w.uz}</span></div>
+    <div style="display:flex;gap:5px"><span class="badge b-cefr">${w.cefr}</span><span style="font-size:11px;color:#888">${w.known||0}/3</span></div>
+  </div>`).join('');
+}
+renderStreakBadge();
+document.getElementById('status-txt').textContent='Gemini AI · Tayyor ✓';
+</script>
+</body>
+</html>
