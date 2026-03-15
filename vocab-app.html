@@ -9,84 +9,79 @@
 <meta name="apple-mobile-web-app-title" content="CEFR Coach">
 <link rel="manifest" href="manifest.json">
 <link rel="apple-touch-icon" href="icon-192.png">
-<title>CEFR Smart Coach</title>
+<!-- Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-XXXXXXXXXX"></script>
+<script>
+window.dataLayer=window.dataLayer||[];
+function gtag(){dataLayer.push(arguments);}
+gtag('js',new Date());
+gtag('config','G-XXXXXXXXXX');
+</script>
+<title>CEFR Smart Coach v2</title>
 <style>
 :root{
   --bg:#f5f5f0;--surface:#fff;--border:#e8e8e3;--text:#1a1a1a;--muted:#888;
-  --primary:#1a1a1a;--primary-fg:#fff;--success-bg:#e8f5e0;--success:#2a7a0a;
+  --primary:#1a1a1a;--pfg:#fff;--success-bg:#e8f5e0;--success:#2a7a0a;
   --danger-bg:#fff0f0;--danger:#c00;--warn-bg:#fff8e0;--warn:#8a6000;
-  --info-bg:#e8f0ff;--info:#1a3a8a;--card-shadow:0 1px 3px rgba(0,0,0,.06);
+  --info-bg:#e8f0ff;--info:#1a3a8a;--shadow:0 1px 3px rgba(0,0,0,.06);
 }
 .dark{
   --bg:#0f0f0f;--surface:#1a1a1a;--border:#2a2a2a;--text:#f0f0f0;--muted:#666;
-  --primary:#f0f0f0;--primary-fg:#0f0f0f;--success-bg:#0a2a0a;--success:#5aaa2a;
+  --primary:#f0f0f0;--pfg:#0f0f0f;--success-bg:#0a2a0a;--success:#5aaa2a;
   --danger-bg:#2a0a0a;--danger:#ff6666;--warn-bg:#2a2000;--warn:#ffcc44;
-  --info-bg:#0a1a3a;--info:#6699ff;--card-shadow:0 1px 3px rgba(0,0,0,.3);
+  --info-bg:#0a1a3a;--info:#6699ff;--shadow:0 1px 3px rgba(0,0,0,.3);
 }
-*{box-sizing:border-box;margin:0;padding:0;transition:background .2s,color .2s,border-color .2s}
-body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;padding-bottom:72px}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;padding-bottom:72px;transition:background .2s,color .2s}
 .app{max-width:680px;margin:0 auto;padding:.75rem}
-/* Header */
-.hdr{display:flex;justify-content:space-between;align-items:center;padding:.75rem 1rem;background:var(--surface);border-radius:14px;border:1px solid var(--border);margin-bottom:.75rem;box-shadow:var(--card-shadow)}
-.logo{font-size:17px;font-weight:700;letter-spacing:-.3px}
+.hdr{display:flex;justify-content:space-between;align-items:center;padding:.75rem 1rem;background:var(--surface);border-radius:14px;border:1px solid var(--border);margin-bottom:.75rem;box-shadow:var(--shadow)}
+.logo{font-size:17px;font-weight:700}
 .sub{font-size:11px;color:var(--muted);margin-top:1px}
-.hdr-right{display:flex;align-items:center;gap:8px}
-/* Bottom nav */
+.ver{font-size:10px;background:var(--info-bg);color:var(--info);padding:2px 6px;border-radius:6px;margin-left:6px}
 .bnav{position:fixed;bottom:0;left:0;right:0;background:var(--surface);border-top:1px solid var(--border);display:flex;z-index:100;padding-bottom:env(safe-area-inset-bottom)}
-.nb{flex:1;padding:8px 4px 6px;border:none;background:none;cursor:pointer;font-family:inherit;display:flex;flex-direction:column;align-items:center;gap:2px;color:var(--muted);font-size:10px;-webkit-tap-highlight-color:transparent}
+.nb{flex:1;padding:8px 4px 6px;border:none;background:none;cursor:pointer;font-family:inherit;display:flex;flex-direction:column;align-items:center;gap:2px;color:var(--muted);font-size:10px;-webkit-tap-highlight-color:transparent;position:relative}
 .nb.active{color:var(--text);font-weight:500}
 .nb-ic{font-size:19px;line-height:1}
-/* Panels */
+.nb-badge{position:absolute;top:4px;right:calc(50% - 14px);background:var(--danger);color:#fff;border-radius:8px;padding:1px 5px;font-size:9px;font-weight:700}
 .panel{display:none}.panel.active{display:block}
-/* Cards */
-.card{background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:.875rem 1rem;margin-bottom:.75rem;box-shadow:var(--card-shadow)}
-/* Inputs */
+.card{background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:.875rem 1rem;margin-bottom:.75rem;box-shadow:var(--shadow)}
 .inp{width:100%;padding:10px 14px;border:1.5px solid var(--border);border-radius:10px;font-size:16px;font-family:inherit;outline:none;background:var(--surface);color:var(--text);-webkit-appearance:none}
 .inp:focus{border-color:var(--primary)}
-/* Buttons */
-.btn{padding:9px 16px;border:1.5px solid var(--border);border-radius:10px;background:var(--surface);cursor:pointer;font-size:13px;font-family:inherit;color:var(--text);-webkit-tap-highlight-color:transparent}
+.btn{padding:9px 16px;border:1.5px solid var(--border);border-radius:10px;background:var(--surface);cursor:pointer;font-size:13px;font-family:inherit;color:var(--text);-webkit-tap-highlight-color:transparent;transition:opacity .15s}
 .btn:active{opacity:.7}
-.btn-p{background:var(--primary);color:var(--primary-fg);border-color:var(--primary)}
+.btn-p{background:var(--primary);color:var(--pfg);border-color:var(--primary)}
 .btn-sm{padding:5px 12px;font-size:12px}
-.btn-icon{padding:7px;border-radius:8px;font-size:16px;line-height:1}
-/* Badges */
+.btn-icon{padding:7px 9px;border-radius:8px;font-size:15px;line-height:1}
 .badge{display:inline-block;padding:3px 8px;border-radius:20px;font-size:11px;font-weight:600}
 .b-verb{background:#e8e6ff;color:#4a3f9e}.b-noun{background:#d4f5e9;color:#1a6b4a}
 .b-adj{background:#fde8dd;color:#8b3a1f}.b-adv{background:#daeeff;color:#1a5a8b}
 .b-prep{background:#e0f0c8;color:#3a5c14}.b-other{background:#ebebeb;color:#555}
 .b-cefr{background:#fff0c8;color:#7a5200}
+.b-ielts{background:#e8fff0;color:#0a5a2a}
 .b-formal{background:#e8f0ff;color:#1a3a8a}
 .b-informal{background:#ffe8f5;color:#8a1a5a}
-.b-ielts{background:#e8fff0;color:#0a5a2a}
-/* Word cards */
-.wcard{background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:.875rem 1rem;margin-bottom:.75rem;box-shadow:var(--card-shadow)}
+.wcard{background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:.875rem 1rem;margin-bottom:.75rem;box-shadow:var(--shadow)}
 .wen{font-size:20px;font-weight:700}
 .wuz{font-size:14px;color:var(--muted);margin:3px 0 8px}
 .exs{font-size:13px;color:var(--muted);line-height:1.8;border-top:1px solid var(--border);padding-top:8px;margin-top:8px}
 .exs li{margin-bottom:5px;list-style:none;padding-left:11px;border-left:2px solid var(--border)}
-.ex-tag{font-size:10px;font-weight:600;padding:1px 6px;border-radius:4px;margin-right:4px;background:var(--info-bg);color:var(--info)}
-/* Spaced repetition */
-.sr-bar{display:flex;gap:4px;margin:6px 0}
+.sr-bar{display:flex;gap:3px;margin:5px 0}
 .sr-step{flex:1;height:5px;border-radius:3px;background:var(--border)}
 .sr-step.done{background:var(--success)}
-.sr-step.next{background:var(--warn)}
-.sr-due{font-size:11px;font-weight:600;padding:3px 8px;border-radius:6px}
-.sr-due.today{background:var(--warn-bg);color:var(--warn)}
-.sr-due.done{background:var(--success-bg);color:var(--success)}
-.sr-due.future{background:var(--info-bg);color:var(--info)}
-/* Stats */
+.sr-step.cur{background:var(--warn)}
+.sr-due{font-size:11px;font-weight:600;padding:2px 7px;border-radius:5px;display:inline-block}
+.sr-today{background:var(--warn-bg);color:var(--warn)}
+.sr-done{background:var(--success-bg);color:var(--success)}
+.sr-future{background:var(--info-bg);color:var(--info)}
 .stat-g{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-bottom:.75rem}
-.sbox{background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:10px;text-align:center;box-shadow:var(--card-shadow)}
+.sbox{background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:10px;text-align:center}
 .sn{font-size:22px;font-weight:700}.sl{font-size:10px;color:var(--muted)}
-/* Progress */
-.prog{height:4px;background:var(--border);border-radius:2px;margin:5px 0}
+.prog{height:4px;background:var(--border);border-radius:2px;margin:4px 0}
 .progb{height:4px;background:var(--primary);border-radius:2px;transition:width .4s}
-/* Filter */
-.frow{display:flex;gap:5px;flex-wrap:nowrap;overflow-x:auto;margin-bottom:.75rem;padding-bottom:2px;-webkit-overflow-scrolling:touch}
+.frow{display:flex;gap:5px;overflow-x:auto;margin-bottom:.75rem;padding-bottom:2px;-webkit-overflow-scrolling:touch}
 .frow::-webkit-scrollbar{display:none}
 .fb{padding:6px 13px;border:1.5px solid var(--border);border-radius:20px;background:var(--surface);cursor:pointer;font-size:12px;font-family:inherit;white-space:nowrap;color:var(--text)}
-.fb.active{background:var(--primary);color:var(--primary-fg);border-color:var(--primary)}
-/* Quiz */
+.fb.active{background:var(--primary);color:var(--pfg);border-color:var(--primary)}
 .qcard{background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:1.25rem;text-align:center;margin-bottom:.75rem}
 .qword{font-size:28px;font-weight:700;margin-bottom:4px;line-height:1.3}
 .qsub{font-size:12px;color:var(--muted);margin-bottom:1rem}
@@ -97,48 +92,95 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
 .finp{width:100%;padding:12px;border:1.5px solid var(--border);border-radius:10px;font-size:16px;text-align:center;font-family:inherit;outline:none;background:var(--surface);color:var(--text);margin-bottom:10px}
 .finp.correct{border-color:var(--success);background:var(--success-bg);color:var(--success)}
 .finp.wrong{border-color:var(--danger);background:var(--danger-bg);color:var(--danger)}
-/* Quiz type */
-.qtrow{display:flex;gap:5px;overflow-x:auto;margin-bottom:.75rem;padding-bottom:2px}
+.qtrow{display:flex;gap:5px;overflow-x:auto;margin-bottom:.75rem}
 .qtrow::-webkit-scrollbar{display:none}
 .qtb{padding:6px 13px;border:1.5px solid var(--border);border-radius:20px;background:var(--surface);cursor:pointer;font-size:12px;font-family:inherit;white-space:nowrap;color:var(--text)}
-.qtb.active{background:var(--primary);color:var(--primary-fg);border-color:var(--primary)}
-/* Streak */
+.qtb.active{background:var(--primary);color:var(--pfg);border-color:var(--primary)}
 .sday{width:33px;height:33px;border-radius:7px;display:flex;align-items:center;justify-content:center;font-size:10px;border:1px solid var(--border);color:var(--muted)}
 .sday.done{background:var(--success-bg);border-color:var(--success);color:var(--success);font-weight:600}
 .sday.today{border:2px solid var(--primary)}
-/* Misc */
-.spk{background:none;border:none;cursor:pointer;font-size:17px;padding:3px;color:var(--muted);-webkit-tap-highlight-color:transparent}
+.spk{background:none;border:none;cursor:pointer;font-size:17px;padding:3px;color:var(--muted)}
 .loading{display:flex;align-items:center;gap:8px;color:var(--muted);font-size:13px;padding:10px 0}
 .dot{width:6px;height:6px;border-radius:50%;background:var(--muted);display:inline-block;animation:bl 1.2s infinite}
 .dot:nth-child(2){animation-delay:.2s}.dot:nth-child(3){animation-delay:.4s}
 @keyframes bl{0%,80%,100%{opacity:.2}40%{opacity:1}}
 .err{background:var(--danger-bg);border:1px solid var(--danger);border-radius:10px;padding:10px 14px;font-size:13px;color:var(--danger);margin-top:8px}
 .tip-box{background:var(--warn-bg);border-radius:8px;padding:8px 11px;font-size:12px;color:var(--warn);margin-top:8px;line-height:1.6}
-.formal-box{background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:10px 12px;margin-top:8px;font-size:12px;line-height:1.7}
-.toast{position:fixed;bottom:80px;left:50%;transform:translateX(-50%);background:var(--primary);color:var(--primary-fg);border-radius:10px;padding:10px 20px;font-size:13px;z-index:999;white-space:nowrap;pointer-events:none}
-/* Word game */
-.game-card{background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:1.25rem;text-align:center;margin-bottom:.75rem}
-.game-word{font-size:36px;font-weight:700;letter-spacing:8px;margin:12px 0;font-family:monospace}
+.formal-box{border:1px solid var(--border);border-radius:10px;padding:10px 12px;margin-top:8px;font-size:12px;line-height:1.8}
+.toast-el{position:fixed;bottom:80px;left:50%;transform:translateX(-50%);background:var(--primary);color:var(--pfg);border-radius:10px;padding:10px 20px;font-size:13px;z-index:9999;white-space:nowrap;pointer-events:none}
+.game-word-display{font-size:32px;font-weight:700;letter-spacing:10px;margin:12px 0;font-family:monospace;color:var(--text)}
 .game-letters{display:flex;flex-wrap:wrap;gap:8px;justify-content:center;margin:12px 0}
-.gletter{width:42px;height:42px;border:1.5px solid var(--border);border-radius:8px;background:var(--surface);cursor:pointer;font-size:16px;font-weight:600;font-family:inherit;color:var(--text);-webkit-tap-highlight-color:transparent}
-.gletter:active{opacity:.6}
-/* Dark toggle */
-.dark-btn{background:none;border:1.5px solid var(--border);border-radius:8px;padding:5px 8px;cursor:pointer;font-size:15px;-webkit-tap-highlight-color:transparent}
-/* Export */
-.export-row{display:flex;gap:8px;flex-wrap:wrap}
-/* Due badge */
-.due-count{background:var(--danger);color:#fff;border-radius:10px;padding:1px 6px;font-size:10px;font-weight:700;margin-left:4px}
+.gletter{width:44px;height:44px;border:1.5px solid var(--border);border-radius:8px;background:var(--surface);cursor:pointer;font-size:16px;font-weight:700;font-family:inherit;color:var(--text)}
+.gletter:disabled{opacity:.3}
+.dark-btn{background:none;border:1.5px solid var(--border);border-radius:8px;padding:5px 8px;cursor:pointer;font-size:15px}
+.stat-chart{display:flex;gap:4px;align-items:flex-end;height:80px;margin:12px 0}
+.stat-bar-wrap{flex:1;display:flex;flex-direction:column;align-items:center;gap:3px}
+.stat-bar{width:100%;background:var(--primary);border-radius:4px 4px 0 0;min-height:4px;transition:height .4s}
+.stat-bar-lbl{font-size:9px;color:var(--muted)}
+/* Onboarding */
+.onboard{position:fixed;inset:0;background:rgba(0,0,0,.7);z-index:200;display:flex;align-items:center;justify-content:center;padding:1rem}
+.onboard-card{background:var(--surface);border-radius:20px;padding:1.5rem;max-width:360px;width:100%;text-align:center}
+.onboard-step{display:none}.onboard-step.active{display:block}
+.onboard-icon{font-size:48px;margin-bottom:12px}
+.onboard-dots{display:flex;justify-content:center;gap:6px;margin:16px 0}
+.onboard-dot{width:8px;height:8px;border-radius:50%;background:var(--border)}
+.onboard-dot.active{background:var(--primary)}
+/* PDF print */
+@media print{
+  body{background:#fff;padding:0}
+  .bnav,.hdr,.frow,.qtrow,.btn,.spk,.dark-btn,.nb-badge{display:none!important}
+  .app{max-width:100%;padding:0}
+  .wcard{break-inside:avoid;border:1px solid #ddd;margin-bottom:8px;box-shadow:none}
+  .panel{display:block!important}
+  #panel-add,#panel-quiz,#panel-game,#panel-more{display:none!important}
+  #panel-list{display:block!important}
+  .stat-g{display:none}
+  body{color:#000}
+  .wen{color:#000}.wuz{color:#444}.exs{color:#444}
+}
 </style>
 </head>
 <body>
-<div class="app">
+<!-- ONBOARDING -->
+<div class="onboard" id="onboard" style="display:none">
+  <div class="onboard-card">
+    <div class="onboard-step active" id="ob1">
+      <div class="onboard-icon">📚</div>
+      <div style="font-size:20px;font-weight:700;margin-bottom:8px">CEFR Smart Coach</div>
+      <div style="font-size:14px;color:var(--muted);line-height:1.6">O'zbek tilida CEFR/IELTS uchun eng aqlli lug'at treneri. AI tahlil, Spaced Repetition, va ko'p narsa!</div>
+    </div>
+    <div class="onboard-step" id="ob2">
+      <div class="onboard-icon">🧠</div>
+      <div style="font-size:18px;font-weight:700;margin-bottom:8px">Spaced Repetition</div>
+      <div style="font-size:14px;color:var(--muted);line-height:1.6">Ebbinghaus formulasi: so'zlar 1→3→7→14→21→30 kun jadvalida takrorlanadi. Hech narsa unutilmaydi!</div>
+    </div>
+    <div class="onboard-step" id="ob3">
+      <div class="onboard-icon">🎯</div>
+      <div style="font-size:18px;font-weight:700;margin-bottom:8px">Formal & IELTS</div>
+      <div style="font-size:14px;color:var(--muted);line-height:1.6">Har so'z uchun: Formal, Informal va IELTS Writing da qanday ishlatilishini o'rganing!</div>
+    </div>
+    <div class="onboard-step" id="ob4">
+      <div class="onboard-icon">🚀</div>
+      <div style="font-size:18px;font-weight:700;margin-bottom:8px">Tayyor!</div>
+      <div style="font-size:14px;color:var(--muted);line-height:1.6">Birinchi so'zingizni qo'shing. Kuniga 10 ta so'z — 1 oyda 300 ta yangi so'z!</div>
+    </div>
+    <div class="onboard-dots">
+      <div class="onboard-dot active" id="od1"></div>
+      <div class="onboard-dot" id="od2"></div>
+      <div class="onboard-dot" id="od3"></div>
+      <div class="onboard-dot" id="od4"></div>
+    </div>
+    <button class="btn btn-p" style="width:100%" id="ob-next-btn" onclick="obNext()">Davom etish →</button>
+  </div>
+</div>
 
+<div class="app">
 <div class="hdr">
   <div>
-    <div class="logo">CEFR Smart Coach</div>
-    <div class="sub" id="sub-txt">Groq AI · Spaced Repetition · O'zbek tilida</div>
+    <div class="logo">CEFR Smart Coach <span class="ver">v2.0</span></div>
+    <div class="sub" id="sub-txt">Groq AI · Spaced Repetition · O'zbek</div>
   </div>
-  <div class="hdr-right">
+  <div style="display:flex;align-items:center;gap:8px">
     <span id="sbadge" style="font-size:14px;font-weight:700"></span>
     <button class="dark-btn" onclick="toggleDark()" id="dark-btn">🌙</button>
   </div>
@@ -152,6 +194,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
       <input id="wi" class="inp" placeholder="Inglizcha so'z..." autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false">
       <button class="btn btn-p" id="abtn" onclick="analyze()">Tahlil</button>
     </div>
+    <div id="storage-info" style="font-size:11px;color:var(--muted);margin-bottom:4px"></div>
     <div id="aresult"></div>
   </div>
   <div class="card" style="border-style:dashed;text-align:center;padding:1rem;background:var(--bg)">
@@ -161,7 +204,6 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
       <button class="btn btn-sm" onclick="qa('achieve')">achieve</button>
       <button class="btn btn-sm" onclick="qa('significant')">significant</button>
       <button class="btn btn-sm" onclick="qa('despite')">despite</button>
-      <button class="btn btn-sm" onclick="qa('fluent')">fluent</button>
       <button class="btn btn-sm" onclick="qa('analyze')">analyze</button>
     </div>
   </div>
@@ -172,8 +214,14 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
   <div class="stat-g">
     <div class="sbox"><div class="sn" id="st">0</div><div class="sl">Jami</div></div>
     <div class="sbox"><div class="sn" id="sk">0</div><div class="sl">O'rgandim</div></div>
-    <div class="sbox"><div class="sn" id="sr2">0</div><div class="sl">Takrorlash</div></div>
-    <div class="sbox"><div class="sn" id="sd">0</div><div class="sl">Bugun</div></div>
+    <div class="sbox"><div class="sn" id="sdue">0</div><div class="sl">Bugun ⏰</div></div>
+    <div class="sbox"><div class="sn" id="sd">0</div><div class="sl">Bugun +</div></div>
+  </div>
+  <div style="display:flex;gap:8px;margin-bottom:.75rem;flex-wrap:wrap">
+    <button class="btn btn-sm btn-p" onclick="printPDF()">🖨 PDF</button>
+    <button class="btn btn-sm" onclick="exportData()">📤 Eksport</button>
+    <button class="btn btn-sm" onclick="document.getElementById('imp').click()">📥 Import</button>
+    <input type="file" id="imp" accept=".json" style="display:none" onchange="importData(this)">
   </div>
   <div class="frow">
     <button class="fb active" onclick="sf('all',this)">Hammasi</button>
@@ -206,28 +254,25 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
   <div id="game-area"></div>
 </div>
 
-<!-- STREAK & SETTINGS -->
+<!-- MORE -->
 <div class="panel" id="panel-more">
+  <!-- Streak -->
   <div class="card">
     <div style="font-size:14px;font-weight:600;margin-bottom:4px">30 kunlik streak</div>
     <div id="sinfo" style="font-size:13px;color:var(--muted);margin-bottom:10px"></div>
     <div style="display:flex;gap:4px;flex-wrap:wrap" id="sbar"></div>
   </div>
+  <!-- Statistika -->
+  <div class="card">
+    <div style="font-size:14px;font-weight:600;margin-bottom:12px">So'z statistikasi</div>
+    <div id="stat-content"></div>
+  </div>
+  <!-- Bugun takrorlash -->
   <div class="card">
     <div style="font-size:14px;font-weight:600;margin-bottom:10px">Bugun takrorlang</div>
     <div id="rlist"></div>
   </div>
-  <div class="card">
-    <div style="font-size:14px;font-weight:600;margin-bottom:10px">Eksport / Import</div>
-    <div class="export-row">
-      <button class="btn btn-p" onclick="exportData()">📤 Eksport (JSON)</button>
-      <button class="btn" onclick="document.getElementById('import-file').click()">📥 Import</button>
-      <input type="file" id="import-file" accept=".json" style="display:none" onchange="importData(this)">
-    </div>
-    <div style="font-size:12px;color:var(--muted);margin-top:8px">Lug'atni boshqa qurilmaga ko'chirish uchun</div>
-  </div>
 </div>
-
 </div>
 
 <!-- Bottom Nav -->
@@ -245,60 +290,97 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
     <span class="nb-ic">🎮</span><span>O'yin</span>
   </button>
   <button class="nb" id="nav-more" onclick="sw('more',this)">
-    <span class="nb-ic">⚡</span><span>Streak</span>
+    <span class="nb-ic">📊</span><span>Statistika</span>
   </button>
 </nav>
 
 <script>
+const APP_VER='2.0.1';
 const WORKER="https://gemini-proxy.elshodibodullayev17.workers.dev";
-const S='cefr_smart_v1',SS='cefr_streak_s1',TODAY=new Date().toISOString().slice(0,10);
-const SR_INTERVALS=[1,3,7,14,21,30]; // Ebbinghaus
+const S='cefr_smart_v2',SS='cefr_sk_v2',TODAY=new Date().toISOString().slice(0,10);
+const SR=[1,3,7,14,21,30];
 let vocab=JSON.parse(localStorage.getItem(S)||'[]');
 let days=JSON.parse(localStorage.getItem(SS)||'[]');
 let filt='all',qt='multi',qs={},busy=false;
-let darkMode=localStorage.getItem('dark_mode')==='1';
-if(darkMode) document.documentElement.classList.add('dark');
+let dark=localStorage.getItem('dark')==='1';
+let obStep=1;
 
+// Dark mode
+if(dark){document.documentElement.classList.add('dark');document.getElementById('dark-btn').textContent='☀️';}
 function toggleDark(){
-  darkMode=!darkMode;
-  document.documentElement.classList.toggle('dark',darkMode);
-  localStorage.setItem('dark_mode',darkMode?'1':'0');
-  document.getElementById('dark-btn').textContent=darkMode?'☀️':'🌙';
+  dark=!dark;document.documentElement.classList.toggle('dark',dark);
+  localStorage.setItem('dark',dark?'1':'0');
+  document.getElementById('dark-btn').textContent=dark?'☀️':'🌙';
 }
-if(darkMode) document.getElementById('dark-btn').textContent='☀️';
 
-// Spaced Repetition
-function getSRLevel(w){return w.sr_level||0;}
+// Onboarding
+function checkOnboard(){
+  if(!localStorage.getItem('ob_done')){
+    document.getElementById('onboard').style.display='flex';
+  }
+}
+function obNext(){
+  if(obStep<4){
+    document.getElementById('ob'+obStep).classList.remove('active');
+    document.getElementById('od'+obStep).classList.remove('active');
+    obStep++;
+    document.getElementById('ob'+obStep).classList.add('active');
+    document.getElementById('od'+obStep).classList.add('active');
+    if(obStep===4) document.getElementById('ob-next-btn').textContent='Boshlash 🚀';
+  } else {
+    localStorage.setItem('ob_done','1');
+    document.getElementById('onboard').style.display='none';
+  }
+}
+
+// SR
+function getSRL(w){return w.sr_level||0;}
 function getSRDue(w){
-  if(!w.sr_last) return TODAY;
-  const last=new Date(w.sr_last);
-  const interval=SR_INTERVALS[Math.min(getSRLevel(w),SR_INTERVALS.length-1)];
-  last.setDate(last.getDate()+interval);
-  return last.toISOString().slice(0,10);
+  if(!w.sr_last)return TODAY;
+  const d=new Date(w.sr_last);
+  d.setDate(d.getDate()+SR[Math.min(getSRL(w),SR.length-1)]);
+  return d.toISOString().slice(0,10);
 }
 function isDue(w){return getSRDue(w)<=TODAY;}
-function updateSR(w,correct){
-  if(correct){w.sr_level=Math.min((w.sr_level||0)+1,SR_INTERVALS.length-1);}
-  else{w.sr_level=Math.max((w.sr_level||0)-1,0);}
+function updateSR(w,ok){
+  if(ok)w.sr_level=Math.min((w.sr_level||0)+1,SR.length-1);
+  else w.sr_level=Math.max((w.sr_level||0)-1,0);
   w.sr_last=TODAY;
 }
-function srLabel(w){
-  const due=getSRDue(w);
-  const lvl=getSRLevel(w);
-  if(lvl>=SR_INTERVALS.length-1) return {cls:'done',txt:"✓ O'rganildi"};
-  if(due<=TODAY) return {cls:'today',txt:'⏰ Bugun takrorla'};
-  return {cls:'future',txt:'📅 '+due};
+function srInfo(w){
+  const l=getSRL(w),due=getSRDue(w);
+  if(l>=SR.length-1)return{cls:'sr-done',txt:'✓ O\'rganildi'};
+  if(due<=TODAY)return{cls:'sr-today',txt:'⏰ Bugun takrorla'};
+  return{cls:'sr-future',txt:'📅 '+due};
 }
 
-function save(){localStorage.setItem(S,JSON.stringify(vocab));markS();}
+// Storage info
+function updateStorageInfo(){
+  const used=new Blob([JSON.stringify(vocab)]).size;
+  const kb=Math.round(used/1024);
+  const max=5000;
+  const pct=Math.round(kb/max*100);
+  document.getElementById('storage-info').textContent=`Lug'at: ${vocab.length} so'z · ${kb}KB/${max}KB (${pct}%)`;
+}
+
+function save(){localStorage.setItem(S,JSON.stringify(vocab));markS();updateDueBadge();}
 function markS(){if(!days.includes(TODAY))days.push(TODAY);localStorage.setItem(SS,JSON.stringify(days));renderSB();}
+function updateDueBadge(){
+  const due=vocab.filter(v=>isDue(v)&&getSRL(v)<SR.length-1).length;
+  const nb=document.getElementById('nav-quiz');
+  let badge=nb.querySelector('.nb-badge');
+  if(due>0){
+    if(!badge){badge=document.createElement('div');badge.className='nb-badge';nb.appendChild(badge);}
+    badge.textContent=due;
+  } else if(badge) badge.remove();
+}
 function renderSB(){
   let s=0,d=new Date();
   while(true){const k=d.toISOString().slice(0,10);if(days.includes(k)){s++;d.setDate(d.getDate()-1);}else break;}
   document.getElementById('sbadge').textContent=s>0?'🔥'+s:'';
 }
 function toast(m){
-  const el=document.createElement('div');el.className='toast';el.textContent=m;
+  const el=document.createElement('div');el.className='toast-el';el.textContent=m;
   document.body.appendChild(el);setTimeout(()=>el.remove(),2500);
 }
 function sw(t,btn){
@@ -306,7 +388,11 @@ function sw(t,btn){
   document.querySelectorAll('.nb').forEach(b=>b.classList.remove('active'));
   document.getElementById('panel-'+t).classList.add('active');
   btn.classList.add('active');
-  if(t==='list')rl();if(t==='quiz')startQ();if(t==='more')renderMore();if(t==='game')startGame();
+  if(t==='list'){rl();updateStorageInfo();}
+  if(t==='quiz')startQ();
+  if(t==='more')renderMore();
+  if(t==='game')startGame();
+  if(t==='add')updateStorageInfo();
 }
 document.getElementById('wi').addEventListener('keydown',e=>{if(e.key==='Enter')analyze();});
 function qa(w){document.getElementById('wi').value=w;analyze();}
@@ -315,37 +401,38 @@ async function analyze(){
   if(busy)return;
   const word=document.getElementById('wi').value.trim();
   if(!word)return;
+  if(vocab.find(v=>v.word.toLowerCase()===word.toLowerCase())){toast("Bu so'z allaqachon bor!");return;}
   busy=true;
   const btn=document.getElementById('abtn');
   btn.disabled=true;btn.textContent='...';
   const res=document.getElementById('aresult');
-  res.innerHTML='<div class="loading"><span class="dot"></span><span class="dot"></span><span class="dot"></span><span style="margin-left:6px">Tahlil qilyapti...</span></div>';
+  res.innerHTML='<div class="loading"><span class="dot"></span><span class="dot"></span><span class="dot"></span><span style="margin-left:6px">Groq AI tahlil qilyapti...</span></div>';
   try{
     const r=await fetch(`${WORKER}/?word=${encodeURIComponent(word)}`);
-    if(!r.ok) throw new Error('HTTP '+r.status);
+    if(!r.ok)throw new Error('HTTP '+r.status);
     const data=await r.json();
-    if(data.error) throw new Error(JSON.stringify(data.error));
+    if(data.error)throw new Error(JSON.stringify(data.error));
     let text=data.groq.replace(/```json|```/g,'').trim();
     const p=JSON.parse(text);
-    p.known=0;p.sr_level=0;p.sr_last=null;p.added=Date.now();p.addedDate=TODAY;
+    p.known=0;p.sr_level=0;p.sr_last=null;p.added=Date.now();p.addedDate=TODAY;p.wrong_count=0;p.right_count=0;
     showPrev(p);
   }catch(e){
     res.innerHTML=`<div class="err">Xatolik: ${e.message}</div>`;
   }finally{busy=false;btn.disabled=false;btn.textContent='Tahlil';}
 }
-
 function pc(p){const m={verb:'b-verb',noun:'b-noun',adjective:'b-adj',adverb:'b-adv',preposition:'b-prep'};return m[p]||'b-other';}
 function pu(p){const m={verb:"Fe'l",noun:'Ot',adjective:'Sifat',adverb:'Ravish',preposition:"Ko'makchi",other:'Boshqa'};return m[p]||p;}
 function spk(w){if('speechSynthesis' in window){speechSynthesis.cancel();const u=new SpeechSynthesisUtterance(w);u.lang='en-US';u.rate=0.85;speechSynthesis.speak(u);}}
 
+function shareWord(word,uz){
+  const text=`📚 "${word}" = ${uz}\n\nCEFR Smart Coach da o'rgandim!\nhttps://elshodibodullayev17-dev.github.io/vocab-app/vocab-app.html`;
+  if(navigator.share){navigator.share({title:'CEFR So\'z',text});}
+  else{navigator.clipboard.writeText(text).then(()=>toast('Nusxa olindi!'));}
+}
+
 function showPrev(w){
   const res=document.getElementById('aresult');
   const ws=JSON.stringify(w);
-  const formalHtml=w.formal_use?`<div class="formal-box">
-    <div style="margin-bottom:4px"><span class="badge b-formal">Formal</span> ${w.formal_use||''}</div>
-    <div style="margin-bottom:4px"><span class="badge b-informal">Informal</span> ${w.informal_use||''}</div>
-    ${w.ielts_use?`<div><span class="badge b-ielts">IELTS</span> ${w.ielts_use}</div>`:''}
-  </div>`:'';
   res.innerHTML=`<div class="wcard" style="margin-top:10px">
     <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:5px">
       <div style="display:flex;align-items:center;gap:8px">
@@ -360,11 +447,16 @@ function showPrev(w){
     </div>
     <div class="wuz">${w.uz} — <em>${w.definition_uz}</em></div>
     <ul class="exs">${(w.examples||[]).map(e=>`<li>${e}</li>`).join('')}</ul>
-    ${formalHtml}
+    ${w.formal_use?`<div class="formal-box">
+      <div><span class="badge b-formal">Formal</span> ${w.formal_use}</div>
+      <div style="margin-top:4px"><span class="badge b-informal">Informal</span> ${w.informal_use||'—'}</div>
+      ${w.ielts_use?`<div style="margin-top:4px"><span class="badge b-ielts">IELTS Writing</span> ${w.ielts_use}</div>`:''}
+    </div>`:''}
     <div class="tip-box">💡 ${w.tip||''}</div>
     <div style="margin-top:10px;display:flex;gap:8px">
       <button class="btn btn-p" style="flex:1" onclick='addW(${ws.replace(/'/g,"&#39;")})'>Lug'atga qo'shish</button>
-      <button class="btn" onclick="document.getElementById('aresult').innerHTML=''">✕</button>
+      <button class="btn btn-icon" onclick="shareWord('${w.word.replace(/'/g,"\\'")}','${(w.uz||'').replace(/'/g,"\\'")}')">🔗</button>
+      <button class="btn btn-icon" onclick="document.getElementById('aresult').innerHTML=''">✕</button>
     </div>
   </div>`;
 }
@@ -374,47 +466,52 @@ function addW(w){
   if(vocab.find(v=>v.word.toLowerCase()===w.word.toLowerCase())){toast("Allaqachon bor!");return;}
   vocab.unshift(w);save();
   document.getElementById('wi').value='';
-  document.getElementById('aresult').innerHTML=`<div style="color:var(--success);font-size:13px;padding:8px 0;font-weight:600">✓ "${w.word}" qo'shildi! (Takrorlash: ertaga)</div>`;
+  const next=getSRDue({sr_level:0,sr_last:TODAY});
+  document.getElementById('aresult').innerHTML=`<div style="color:var(--success);font-size:13px;padding:8px 0;font-weight:600">✓ "${w.word}" qo'shildi! Keyingi takrorlash: ertaga</div>`;
+  updateStorageInfo();
+  if(typeof gtag!=='undefined') gtag('event','word_added',{word:w.word,cefr:w.cefr});
 }
 
 function sf(f,btn){filt=f;document.querySelectorAll('.fb').forEach(b=>b.classList.remove('active'));btn.classList.add('active');rl();}
 
 function rl(){
-  const due=vocab.filter(v=>isDue(v)&&getSRLevel(v)<SR_INTERVALS.length-1).length;
-  const known=vocab.filter(v=>getSRLevel(v)>=SR_INTERVALS.length-1).length;
+  const due=vocab.filter(v=>isDue(v)&&getSRL(v)<SR.length-1).length;
+  const known=vocab.filter(v=>getSRL(v)>=SR.length-1).length;
   const today=vocab.filter(v=>v.addedDate===TODAY).length;
   document.getElementById('st').textContent=vocab.length;
   document.getElementById('sk').textContent=known;
-  document.getElementById('sr2').textContent=due;
+  document.getElementById('sdue').textContent=due;
   document.getElementById('sd').textContent=today;
   let filtered=vocab;
-  if(filt==='due') filtered=vocab.filter(v=>isDue(v)&&getSRLevel(v)<SR_INTERVALS.length-1);
-  else if(filt==='ielts') filtered=vocab.filter(v=>v.is_ielts);
-  else if(filt!=='all') filtered=vocab.filter(v=>v.cefr===filt);
+  if(filt==='due')filtered=vocab.filter(v=>isDue(v)&&getSRL(v)<SR.length-1);
+  else if(filt==='ielts')filtered=vocab.filter(v=>v.is_ielts);
+  else if(filt!=='all')filtered=vocab.filter(v=>v.cefr===filt);
   const c=document.getElementById('wlist');
-  if(!filtered.length){c.innerHTML=`<div style="text-align:center;color:var(--muted);padding:2rem;font-size:14px">${filt==='due'?"Bugun takrorlanadigan so'z yo'q 🎉":"Bu darajada so'z yo'q"}</div>`;return;}
+  if(!filtered.length){
+    c.innerHTML=`<div style="text-align:center;color:var(--muted);padding:2rem;font-size:14px">${filt==='due'?"🎉 Bugun hammasi takrorlandi!":"Bu darajada so'z yo'q"}</div>`;return;
+  }
   c.innerHTML=filtered.map(w=>{
     const ri=vocab.indexOf(w);
-    const sr=srLabel(w);
-    const lvl=getSRLevel(w);
+    const sr=srInfo(w);
+    const lvl=getSRL(w);
     return `<div class="wcard">
       <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:4px">
         <div style="display:flex;align-items:center;gap:6px">
           <span class="wen" style="font-size:18px">${w.word}</span>
           <button class="spk" onclick="spk('${w.word.replace(/'/g,"\\'")}')">🔊</button>
+          <button class="btn btn-icon" style="font-size:13px;padding:3px 7px" onclick="shareWord('${w.word.replace(/'/g,"\\'")}','${(w.uz||'').replace(/'/g,"\\'")}')">🔗</button>
         </div>
         <div style="display:flex;gap:3px;flex-wrap:wrap;justify-content:flex-end;align-items:center">
           <span class="badge b-cefr">${w.cefr}</span>
-          <span class="badge ${pc(w.pos)}">${pu(w.pos)}</span>
           ${w.is_ielts?'<span class="badge b-ielts">IELTS</span>':''}
-          <button class="btn btn-sm" style="color:var(--danger);border-color:var(--danger);padding:3px 8px" onclick="dw(${ri})">✕</button>
+          <button class="btn btn-sm" style="color:var(--danger);border-color:var(--danger);padding:3px 7px" onclick="dw(${ri})">✕</button>
         </div>
       </div>
       <div class="wuz">${w.uz}</div>
-      <div class="sr-bar">${SR_INTERVALS.map((_,i)=>`<div class="sr-step ${i<lvl?'done':i===lvl?'next':''}"></div>`).join('')}</div>
+      <div class="sr-bar">${SR.map((_,i)=>`<div class="sr-step ${i<lvl?'done':i===lvl?'cur':''}"></div>`).join('')}</div>
       <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:6px">
         <span class="sr-due ${sr.cls}">${sr.txt}</span>
-        <span style="font-size:11px;color:var(--muted)">Daraja ${lvl}/${SR_INTERVALS.length-1}</span>
+        <span style="font-size:11px;color:var(--muted)">✓${w.right_count||0} ✗${w.wrong_count||0}</span>
       </div>
       <ul class="exs">${(w.examples||[]).slice(0,1).map(e=>`<li>${e}</li>`).join('')}</ul>
     </div>`;
@@ -427,16 +524,13 @@ function dw(i){const w=vocab[i];vocab.splice(i,1);localStorage.setItem(S,JSON.st
 function sqt(t,btn){qt=t;document.querySelectorAll('.qtb').forEach(b=>b.classList.remove('active'));btn.classList.add('active');startQ();}
 function startQ(){
   const a=document.getElementById('qarea');
-  const pool=qt==='mixed'||qt==='multi'||qt==='reverse'||qt==='fill'?
-    [...vocab].sort((a,b)=>isDue(a)?-1:isDue(b)?1:0).slice(0,10):
-    vocab.filter(v=>v.formal_use).slice(0,10);
+  let pool=vocab.filter(v=>isDue(v)&&getSRL(v)<SR.length-1);
+  if(pool.length<2)pool=[...vocab].sort(()=>Math.random()-.5);
   if(pool.length<2){a.innerHTML='<div style="text-align:center;color:var(--muted);padding:2rem">Kamida 2 ta so\'z qo\'shing!</div>';return;}
-  qs={words:pool.sort(()=>Math.random()-.5),idx:0,score:0,total:pool.length,ans:false};showQ();
+  if(qt==='formal') pool=vocab.filter(v=>v.formal_use);
+  qs={words:pool.slice(0,10),idx:0,score:0,total:Math.min(pool.length,10),ans:false};showQ();
 }
-function gqt(){
-  if(qt==='mixed')return['multi','reverse','fill'][Math.floor(Math.random()*3)];
-  return qt;
-}
+function gqt(){if(qt==='mixed')return['multi','reverse','fill'][Math.floor(Math.random()*3)];return qt;}
 function showQ(){
   const a=document.getElementById('qarea');
   const{words,idx,total,score}=qs;
@@ -444,25 +538,25 @@ function showQ(){
     const pct=Math.round(score/total*100);
     a.innerHTML=`<div class="qcard">
       <div style="font-size:44px;margin-bottom:10px">${pct>=80?'🏆':pct>=60?'🎉':'📚'}</div>
-      <div style="font-size:24px;font-weight:700;margin-bottom:6px">${score}/${total} to'g'ri</div>
-      <div style="font-size:14px;color:var(--muted);margin-bottom:1.5rem">${pct>=80?"A'lo natija!":pct>=60?"Yaxshi, davom eting!":"Ko'proq mashq kerak"}</div>
+      <div style="font-size:24px;font-weight:700;margin-bottom:6px">${score}/${total}</div>
+      <div style="font-size:14px;color:var(--muted);margin-bottom:1.5rem">${pct>=80?"A'lo!":pct>=60?"Yaxshi!":"Ko'proq mashq!"}</div>
       <button class="btn btn-p" onclick="startQ()">Qaytadan</button>
-    </div>`;return;
+    </div>`;
+    if(typeof gtag!=='undefined')gtag('event','quiz_completed',{score:score,total:total});
+    return;
   }
   const w=words[idx];
   const oth=vocab.filter(v=>v.word!==w.word).sort(()=>Math.random()-.5).slice(0,3);
   const prog=`<div style="font-size:12px;color:var(--muted);margin-bottom:10px;display:flex;justify-content:space-between"><span>${idx+1}/${total}</span><span>Ball: ${score}</span></div>`;
   const type=gqt();
-
   if(type==='formal'&&w.formal_use){
-    const isAsk=Math.random()>.5;
-    const q=isAsk?w.formal_use:w.informal_use;
-    const label=isAsk?'Formal':'Informal';
-    const opts=[...oth.filter(v=>v.formal_use).map(v=>v.word),w.word].sort(()=>Math.random()-.5).slice(0,4);
+    const isFormal=Math.random()>.5;
+    const q=isFormal?w.formal_use:w.informal_use;
+    const opts=[...oth.filter(v=>v.formal_use).slice(0,3).map(v=>v.word),w.word].sort(()=>Math.random()-.5);
     a.innerHTML=prog+`<div class="qcard">
-      <div class="qsub">${w.cefr} · ${label} gapda ishlatilgan so'zni toping</div>
-      <div class="qword" style="font-size:18px;font-weight:500;line-height:1.5">"${q}"</div>
-      <div class="opts" style="margin-top:1rem">${opts.map(o=>`<button class="opt" onclick="chkO(this,'${o}','${w.word}','${w.word}')">${o}</button>`).join('')}</div>
+      <div class="qsub">${isFormal?'Formal':'Informal'} gapda qaysi so'z ishlatilgan?</div>
+      <div style="font-size:16px;font-weight:500;line-height:1.6;margin-bottom:1rem">"${q}"</div>
+      <div class="opts">${opts.map(o=>`<button class="opt" onclick="chkO(this,'${o}','${w.word}','${w.word}')">${o}</button>`).join('')}</div>
     </div>`;return;
   }
   if(type==='fill'){
@@ -512,60 +606,63 @@ function chkF(correct){
 }
 function mkQ(word,ok){
   const w=vocab.find(v=>v.word===word);
-  if(w){updateSR(w,ok);if(ok)qs.score++;save();}
+  if(w){
+    updateSR(w,ok);
+    if(ok){w.right_count=(w.right_count||0)+1;qs.score++;}
+    else w.wrong_count=(w.wrong_count||0)+1;
+    save();
+  }
 }
 
-// WORD GAME - Scramble
-let gameWord=null,gameGuessed=[],gameWrong=0;
+// GAME
+let gWord=null,gGuessed=[],gWrong=0;
 function startGame(){
   const a=document.getElementById('game-area');
-  if(vocab.length<1){a.innerHTML='<div style="text-align:center;color:var(--muted);padding:2rem">Avval so\'z qo\'shing!</div>';return;}
   const pool=vocab.filter(v=>v.word.length>=4&&v.word.length<=8);
   if(!pool.length){a.innerHTML='<div style="text-align:center;color:var(--muted);padding:2rem">4-8 harfli so\'z kerak</div>';return;}
-  gameWord=pool[Math.floor(Math.random()*pool.length)];
-  gameGuessed=Array(gameWord.word.length).fill('');
-  gameWrong=0;
-  renderGame();
+  gWord=pool[Math.floor(Math.random()*pool.length)];
+  gGuessed=Array(gWord.word.length).fill('');
+  gWrong=0;renderGame();
 }
 function renderGame(){
-  if(!gameWord)return;
+  if(!gWord)return;
   const a=document.getElementById('game-area');
-  const w=gameWord.word.toLowerCase();
-  const shuffled=w.split('').sort(()=>Math.random()-.5);
-  const display=gameGuessed.map(l=>l||'_').join(' ');
-  const won=gameGuessed.join('')===w;
-  a.innerHTML=`<div class="game-card">
-    <div style="font-size:13px;color:var(--muted);margin-bottom:4px">So'zni toping — ${gameWord.cefr} · ${pu(gameWord.pos)}</div>
-    <div style="font-size:13px;color:var(--muted);margin-bottom:12px">"${gameWord.uz}"</div>
-    <div class="game-word">${display}</div>
-    ${won?`<div style="color:var(--success);font-size:16px;font-weight:700;margin:12px 0">🎉 To'g'ri!</div>`:''}
-    ${gameWrong>=6&&!won?`<div style="color:var(--danger);font-size:14px;margin:8px 0">❌ Javob: <strong>${w}</strong></div>`:''}
-    <div style="font-size:12px;color:var(--muted);margin-bottom:8px">Xato: ${gameWrong}/6</div>
-    ${!won&&gameWrong<6?`<div class="game-letters">${shuffled.filter((l,i,a)=>a.indexOf(l)===i).map(l=>`<button class="gletter" onclick="guessLetter('${l}')">${l.toUpperCase()}</button>`).join('')}</div>`:''}
-    <button class="btn btn-p" style="margin-top:8px" onclick="startGame()">Yangi so'z</button>
+  const w=gWord.word.toLowerCase();
+  const won=gGuessed.join('')===w;
+  const lost=gWrong>=6&&!won;
+  const display=gGuessed.map((l,i)=>l||'_').join(' ');
+  const usedLetters=[...new Set(w.split(''))];
+  const shuffled=[...usedLetters,...'abcdefghijklmnoprstuvwy'.split('').filter(l=>!usedLetters.includes(l)).slice(0,8)].sort(()=>Math.random()-.5).slice(0,12);
+  a.innerHTML=`<div class="qcard">
+    <div style="font-size:13px;color:var(--muted);margin-bottom:4px">${gWord.cefr} · ${pu(gWord.pos)} · Harflarni bosib so'zni toping</div>
+    <div style="font-size:13px;font-weight:500;margin-bottom:8px">"${gWord.uz}"</div>
+    <div class="game-word-display">${display}</div>
+    ${won?'<div style="color:var(--success);font-size:20px;font-weight:700;margin:8px 0">🎉 Zo\'r!</div>':''}
+    ${lost?`<div style="color:var(--danger);font-size:14px;margin:8px 0">Javob: <strong>${w}</strong></div>`:''}
+    <div style="font-size:12px;color:var(--muted);margin-bottom:8px">${'❤️'.repeat(Math.max(0,6-gWrong))}${'🖤'.repeat(gWrong)}</div>
+    ${!won&&!lost?`<div class="game-letters">${shuffled.map(l=>`<button class="gletter" onclick="guessL('${l}')">${l.toUpperCase()}</button>`).join('')}</div>`:''}
+    <button class="btn btn-p" style="margin-top:10px" onclick="startGame()">Yangi so'z ♻️</button>
   </div>
   <div class="card">
-    <div style="font-size:13px;font-weight:600;margin-bottom:6px">So'z haqida</div>
-    <div class="wuz">${gameWord.uz}</div>
-    <ul class="exs">${(gameWord.examples||[]).slice(0,1).map(e=>`<li>${e}</li>`).join('')}</ul>
+    <div style="font-size:12px;color:var(--muted);margin-bottom:6px">So'z haqida:</div>
+    <ul class="exs">${(gWord.examples||[]).slice(0,1).map(e=>`<li>${e}</li>`).join('')}</ul>
+    ${gWord.tip?`<div class="tip-box">💡 ${gWord.tip}</div>`:''}
   </div>`;
 }
-function guessLetter(l){
-  if(!gameWord||gameWrong>=6)return;
-  const w=gameWord.word.toLowerCase();
+function guessL(l){
+  if(!gWord||gWrong>=6)return;
+  const w=gWord.word.toLowerCase();
   let found=false;
-  for(let i=0;i<w.length;i++){
-    if(w[i]===l&&!gameGuessed[i]){gameGuessed[i]=l;found=true;}
-  }
-  if(!found)gameWrong++;
+  for(let i=0;i<w.length;i++){if(w[i]===l&&!gGuessed[i]){gGuessed[i]=l;found=true;}}
+  if(!found)gWrong++;
   renderGame();
 }
 
-// MORE
+// MORE / STATISTIKA
 function renderMore(){
   let s=0,d=new Date();
   while(true){const k=d.toISOString().slice(0,10);if(days.includes(k)){s++;d.setDate(d.getDate()-1);}else break;}
-  document.getElementById('sinfo').textContent=s>0?`Joriy streak: ${s} kun 🔥`:"Bugun so'z o'rganing!";
+  document.getElementById('sinfo').textContent=s>0?`Joriy streak: ${s} kun 🔥 · Jami: ${days.length} kun`:"Bugun so'z o'rganing!";
   const bar=document.getElementById('sbar');bar.innerHTML='';
   for(let i=29;i>=0;i--){
     const dd=new Date();dd.setDate(dd.getDate()-i);const k=dd.toISOString().slice(0,10);
@@ -574,7 +671,33 @@ function renderMore(){
     el.title=k;el.textContent=['Ya','Du','Se','Ch','Pa','Sh','Ya'][dd.getDay()];
     bar.appendChild(el);
   }
-  const rev=vocab.filter(v=>isDue(v)&&getSRLevel(v)<SR_INTERVALS.length-1).slice(0,6);
+  // Statistika
+  const sc=document.getElementById('stat-content');
+  if(!vocab.length){sc.innerHTML='<div style="color:var(--muted);font-size:13px">Hali so\'z yo\'q</div>';return;}
+  const wrongTop=vocab.filter(v=>v.wrong_count>0).sort((a,b)=>(b.wrong_count||0)-(a.wrong_count||0)).slice(0,5);
+  const cefrCount={A1:0,A2:0,B1:0,B2:0,C1:0,C2:0};
+  vocab.forEach(v=>{if(cefrCount[v.cefr]!==undefined)cefrCount[v.cefr]++;});
+  const maxC=Math.max(...Object.values(cefrCount),1);
+  sc.innerHTML=`
+    <div style="margin-bottom:12px">
+      <div style="font-size:12px;color:var(--muted);margin-bottom:8px">CEFR darajalari bo'yicha:</div>
+      <div class="stat-chart">${Object.entries(cefrCount).map(([k,v])=>`
+        <div class="stat-bar-wrap">
+          <div style="font-size:10px;color:var(--muted);margin-bottom:2px">${v}</div>
+          <div class="stat-bar" style="height:${Math.round(v/maxC*60)+4}px"></div>
+          <div class="stat-bar-lbl">${k}</div>
+        </div>`).join('')}
+      </div>
+    </div>
+    ${wrongTop.length?`<div>
+      <div style="font-size:12px;color:var(--muted);margin-bottom:8px">Ko'p xato qilingan so'zlar:</div>
+      ${wrongTop.map(w=>`<div style="display:flex;justify-content:space-between;padding:6px 0;border-bottom:1px solid var(--border)">
+        <span style="font-weight:600">${w.word}</span>
+        <span style="font-size:12px;color:var(--danger)">✗ ${w.wrong_count} marta</span>
+      </div>`).join('')}
+    </div>`:''}`;
+  // Bugun takrorlash
+  const rev=vocab.filter(v=>isDue(v)&&getSRL(v)<SR.length-1).slice(0,6);
   const rl2=document.getElementById('rlist');
   if(!rev.length){rl2.innerHTML='<div style="font-size:13px;color:var(--muted)">🎉 Bugun hammasi takrorlandi!</div>';return;}
   rl2.innerHTML=rev.map(w=>`<div style="display:flex;justify-content:space-between;align-items:center;padding:9px 0;border-bottom:1px solid var(--border)">
@@ -583,11 +706,17 @@ function renderMore(){
   </div>`).join('');
 }
 
+// PDF
+function printPDF(){
+  window.print();
+  if(typeof gtag!=='undefined')gtag('event','pdf_export',{word_count:vocab.length});
+}
+
 // Export/Import
 function exportData(){
-  const blob=new Blob([JSON.stringify(vocab,null,2)],{type:'application/json'});
+  const blob=new Blob([JSON.stringify({version:APP_VER,exported:TODAY,words:vocab},null,2)],{type:'application/json'});
   const a=document.createElement('a');a.href=URL.createObjectURL(blob);
-  a.download='vocab-backup-'+TODAY+'.json';a.click();
+  a.download=`cefr-lugat-${TODAY}.json`;a.click();
   toast('Eksport qilindi!');
 }
 function importData(input){
@@ -595,19 +724,35 @@ function importData(input){
   const reader=new FileReader();
   reader.onload=e=>{
     try{
-      const data=JSON.parse(e.target.result);
+      let data=JSON.parse(e.target.result);
+      if(data.words)data=data.words;
       if(!Array.isArray(data))throw new Error('Format noto\'g\'ri');
-      const newWords=data.filter(w=>!vocab.find(v=>v.word.toLowerCase()===w.word.toLowerCase()));
-      vocab=[...vocab,...newWords];save();rl();
-      toast(`${newWords.length} ta so'z import qilindi!`);
+      const newW=data.filter(w=>!vocab.find(v=>v.word.toLowerCase()===w.word.toLowerCase()));
+      vocab=[...vocab,...newW];save();rl();
+      toast(`${newW.length} ta so'z import qilindi!`);
     }catch(err){toast('Xatolik: '+err.message);}
   };
   reader.readAsText(file);input.value='';
 }
 
+// Auto-update check
+async function checkUpdate(){
+  try{
+    const r=await fetch(window.location.href+'?v='+Date.now());
+    const html=await r.text();
+    const match=html.match(/APP_VER='([^']+)'/);
+    if(match&&match[1]!==APP_VER){
+      if(confirm(`Yangi versiya mavjud (v${match[1]})! Yangilaysizmi?`)){
+        location.reload(true);
+      }
+    }
+  }catch(e){}
+}
+
 // Init
-renderSB();
+renderSB();updateDueBadge();updateStorageInfo();checkOnboard();
 if('serviceWorker' in navigator) navigator.serviceWorker.register('sw.js').catch(()=>{});
+setTimeout(checkUpdate, 3000);
 </script>
 </body>
 </html>
